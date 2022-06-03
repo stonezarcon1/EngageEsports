@@ -1,9 +1,13 @@
 package com.stonezarcon.engageesports.services;
 
 import com.stonezarcon.engageesports.models.User;
+import com.stonezarcon.engageesports.repos.RoleRepository;
+import com.stonezarcon.engageesports.repos.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -15,6 +19,7 @@ public class UserDetailsImpl implements UserDetails {
     private String enabled;
     private Collection<? extends GrantedAuthority> authorities;
 
+
     public UserDetailsImpl(Long id, String username, String password, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.username = username;
@@ -23,8 +28,11 @@ public class UserDetailsImpl implements UserDetails {
     }
 
     public static UserDetailsImpl build(User user) {
-        System.out.println("Password in userdetailsimpl = " + user.getPassword());
-        return new UserDetailsImpl(user.getId(), user.getUsername(), user.getPassword(), user.getAuthorities());
+        return new
+                UserDetailsImpl(user.getId(),
+                user.getUsername(),
+                user.getPassword(),
+                user.getAuthorities());
     }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
