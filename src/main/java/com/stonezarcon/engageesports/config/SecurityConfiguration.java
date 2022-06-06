@@ -42,9 +42,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .authenticationProvider(authenticationProvider)
                 .authorizeRequests()
+                .antMatchers(allowedEndpoints).permitAll()
                 .antMatchers("/register/teacher/**").hasRole("ADMIN")
                 .antMatchers("/player/profile/**").hasRole("USER")
-                .antMatchers(allowedEndpoints).permitAll()
+
                 .and()
                 .headers().frameOptions().sameOrigin()
 
