@@ -20,6 +20,7 @@ import javax.sql.DataSource;
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     String[] allowedEndpoints = {
+            "/",
             "/hello",
             "/h2-console/**",
             "/login/**",
