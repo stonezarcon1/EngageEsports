@@ -10,8 +10,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Arrays;
 
 @RestController
@@ -23,39 +25,61 @@ public class UserController {
     @Autowired
     RoleRepository roleRepository;
 
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
     @PostMapping("/login")
     public ResponseEntity<?> login() {
         SecurityContext context = SecurityContextHolder.getContext();
         Authentication a = context.getAuthentication();
-        return new ResponseEntity<>(SecurityContextHolder.getContext(), HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(a.getDetails(), HttpStatus.ACCEPTED);
     }
 
     @PostMapping("/register/teacher")
-    public ResponseEntity<?> register(@RequestBody User user) {
-        if (userRepository.findByUsername(user.getUsername()) == null) {
-            user.setRoles(Arrays.asList(roleRepository.findByName("ROLE_USER")));
-            user.setTeacher(true);
-            userRepository.save(user);
+    public ResponseEntity<?> register(@Valid @RequestBody User user) {
 
-            return new ResponseEntity<>("Registered student successfully!", HttpStatus.OK);
+        try {
+            if (userRepository.findByUsername(user.getUsername()) == null) {
+                user.setRoles(Arrays.asList(roleRepository.findByName("ROLE_USER")));
+                user.setTeacher(true);
+                user.setEnabled(true);
+                user.setPassword(passwordEncoder.encode(user.getPassword()));
+                userRepository.save(user);
+
+                return new ResponseEntity<>("Registered student successfully!", HttpStatus.OK);
+            }
+            else {
+                return new ResponseEntity<>("A student already exists with that name.", HttpStatus.OK);
+            }
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>("You must complete all fields before registering a user.",
+                    HttpStatus.NOT_ACCEPTABLE);
         }
-        else {
-            return new ResponseEntity<>("A student already exists with that name.", HttpStatus.OK);
-        }
+
     }
 
     @PostMapping("/register/student")
-    public ResponseEntity<?> registerStudent(@RequestBody User user) {
+    public ResponseEntity<?> registerStudent(@Valid @RequestBody User user) {
 
-        if (userRepository.findByUsername(user.getUsername()) == null) {
-            user.setRoles(Arrays.asList(roleRepository.findByName("ROLE_USER")));
-            userRepository.save(user);
+        try {
+            if (userRepository.findByUsername(user.getUsername()) == null) {
+                user.setRoles(Arrays.asList(roleRepository.findByName("ROLE_USER")));
+                user.setTeacher(false);
+                user.setEnabled(true);
+                user.setPassword(passwordEncoder.encode(user.getPassword()));
+                userRepository.save(user);
 
-            return new ResponseEntity<>("Registered student successfully!", HttpStatus.OK);
+                return new ResponseEntity<>("Registered student successfully!", HttpStatus.OK);
+            }
+            else {
+                return new ResponseEntity<>("A student already exists with that name.", HttpStatus.OK);
+            }
+
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>("You must complete all fields before registering a user.",
+                    HttpStatus.NOT_ACCEPTABLE);
         }
-        else {
-            return new ResponseEntity<>("A student already exists with that name.", HttpStatus.OK);
-        }
+
     }
 }
 

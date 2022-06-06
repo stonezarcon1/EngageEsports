@@ -1,9 +1,14 @@
 package com.stonezarcon.engageesports.models;
 
+import com.sun.istack.NotNull;
+import org.springframework.lang.NonNull;
+import org.springframework.lang.NonNullFields;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import java.util.Collection;
 import java.util.List;
 
@@ -15,14 +20,21 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
+    @NotBlank
     private String firstName;
+    @NotBlank
     private String lastName;
+    @NotBlank
     private String alias;
+    @NotBlank
     private String email;
+
     private boolean teacher;
+    @NotNull
     private Long classId;
+    @NotBlank
     private String username;
+    @NotBlank
     private String password;
     private boolean enabled;
 
@@ -38,27 +50,14 @@ public class User implements UserDetails {
     public User() {
     }
 
-    public User(String username, String password) {
-        this.username = username;
-        this.password = password;
-    }
-
-    public User(String username, String password, boolean enabled) {
-        this.username = username;
-        this.password = password;
-        this.enabled = enabled;
-    }
-
-    public User(String firstName, String lastName, String email, boolean teacher, Long classId,
-                String username, String password, boolean enabled, String alias) {
+    public User(String firstName, String lastName, String email, Long classId,
+                String username, String password, String alias) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.teacher = teacher;
         this.classId = classId;
         this.username = username;
         this.password = password;
-        this.enabled = enabled;
         this.alias = alias;
     }
 
@@ -83,6 +82,14 @@ public class User implements UserDetails {
 
     public Long getId() {
         return id;
+    }
+
+    public String getAlias() {
+        return alias;
+    }
+
+    public void setAlias(String alias) {
+        this.alias = alias;
     }
 
     @Override
