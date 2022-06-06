@@ -35,6 +35,11 @@ public class UserController {
     @Autowired
     PasswordEncoder passwordEncoder;
 
+    @GetMapping("/")
+    public ResponseEntity<?> home() {
+        return new ResponseEntity<>("Welcome to my site.", HttpStatus.OK);
+    }
+
     @PostMapping("/login")
     public ResponseEntity<?> login() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
