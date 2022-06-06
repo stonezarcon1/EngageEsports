@@ -47,6 +47,10 @@ public class User implements UserDetails {
                     name = "role_id", referencedColumnName = "id"))
     private Collection<Role> roles;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "playerprofile_id", referencedColumnName = "id")
+    private PlayerProfile profile;
+
     public User() {
     }
 
@@ -165,6 +169,14 @@ public class User implements UserDetails {
 
     public void setRoles(Collection<Role> roles) {
         this.roles = roles;
+    }
+
+    public void setProfile(PlayerProfile profile) {
+        this.profile = profile;
+    }
+
+    public PlayerProfile getProfile() {
+        return profile;
     }
 
     public void setEnabled(boolean enabled) {

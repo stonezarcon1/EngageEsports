@@ -43,6 +43,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authenticationProvider(authenticationProvider)
                 .authorizeRequests()
                 .antMatchers("/register/teacher/**").hasRole("ADMIN")
+                .antMatchers("/player/profile/**").hasRole("USER")
                 .antMatchers(allowedEndpoints).permitAll()
                 .and()
                 .headers().frameOptions().sameOrigin()

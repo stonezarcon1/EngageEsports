@@ -59,3 +59,13 @@ You must supply a value for all fields to avoid errors. All fields other
 than "classId" accept a varchar[255]. classID accepts Long. Users of this
 type will always be defaulted to "enabled" and have their "teacher" value
 initialized as true.
+
+# /player/profile
+
+Permissions needed: User
+
+GET: Requires an authenticated session. Returns player profile for current
+session. 
+
+POST: Requires an authenticated session. Applies @RequestBody to the 
+"testField" field within the player profile.
