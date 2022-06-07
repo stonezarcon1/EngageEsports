@@ -55,13 +55,13 @@ public class UserController {
 
         try {
             if (userRepository.findByUsername(user.getUsername()) == null) {
-                user.setRoles(Arrays.asList(roleRepository.findByName("ROLE_USER")));
+                user.setRoles(Arrays.asList(roleRepository.findByName("ROLE_STAFF")));
                 user.setTeacher(true);
                 user.setEnabled(true);
                 user.setPassword(passwordEncoder.encode(user.getPassword()));
                 userRepository.save(user);
 
-                return new ResponseEntity<>("Registered student successfully!", HttpStatus.OK);
+                return new ResponseEntity<>("Registered staff successfully!", HttpStatus.OK);
             }
             else {
                 return new ResponseEntity<>("A student already exists with that name.", HttpStatus.OK);
@@ -98,7 +98,7 @@ public class UserController {
 
     }
 
-    @GetMapping("/player/profile")
+    @GetMapping("/profile/player-profile/")
     public ResponseEntity<?> getPlayerProfile() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username;
@@ -111,7 +111,7 @@ public class UserController {
         return new ResponseEntity<>(profileRepository.findById(user.getProfile().getId()), HttpStatus.OK) ;
     }
 
-    @PostMapping("/player/profile")
+    @PostMapping("/profile/player-profile/")
     public ResponseEntity<?> addPlayerProfile(@RequestBody String stuff) {
 
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -133,6 +133,22 @@ public class UserController {
             return new ResponseEntity<>("Player Profile successfully set.", HttpStatus.OK);
         }
 
+    }
+
+    @GetMapping("/profile/student-list")
+    public ResponseEntity<?> getStudents() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username;
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails) principal).getUsername();
+        } else {
+            username = principal.toString();
+        }
+        User user = userRepository.findByUsername(username);
+        Long classId = user.getClassId();
+        System.out.println("We recvd classid = " + classId);
+
+        return new ResponseEntity<>(userRepository.findUsersByClassId(classId), HttpStatus.OK);
     }
 }
 

@@ -27,6 +27,18 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             "/register/**"
     };
 
+    String[] adminEndpoints = {
+            "/register/teacher/**"
+    };
+
+    String[] staffEndpoints = {
+            "/profile/student-list/**"
+    };
+
+    String [] userEndpoints = {
+            "/profile/player-profile/**"
+    };
+
     @Autowired
     private AuthenticationProvider authenticationProvider;
 
@@ -48,9 +60,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authenticationProvider(authenticationProvider)
                 .antMatcher("/**")
                 .authorizeRequests()
+                .antMatchers(adminEndpoints).hasRole("ADMIN")
+                .antMatchers(staffEndpoints).hasRole("STAFF")
+                .antMatchers(userEndpoints).hasRole("USER")
                 .antMatchers(allowedEndpoints).permitAll()
-                .antMatchers("/register/teacher/**").hasRole("ADMIN")
-                .antMatchers("/player/profile/**").hasRole("USER")
                 .and()
                 .headers().frameOptions().sameOrigin()
                 .and()

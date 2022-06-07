@@ -52,6 +52,7 @@ public class DataLoader implements
                 readPrivilege, writePrivilege);
         createRoleIfNotFound("ROLE_ADMIN", adminPrivileges);
         createRoleIfNotFound("ROLE_USER", Arrays.asList(readPrivilege));
+        createRoleIfNotFound("ROLE_STAFF", Arrays.asList(readPrivilege));
 
         Role adminRole = roleRepository.findByName("ROLE_ADMIN");
         User user = new User();
@@ -60,6 +61,8 @@ public class DataLoader implements
         user.setLastName("Crain");
         user.setPassword(passwordEncoder.encode("adminpass"));
         user.setEmail("brandonc1606@gmail.com");
+        user.setClassId(Long.valueOf(999));
+        user.setAlias("admin");
         user.setRoles(Arrays.asList(adminRole));
         user.setEnabled(true);
         userRepository.save(user);
