@@ -37,7 +37,7 @@ public class UserController {
 
     @GetMapping("/")
     public ResponseEntity<?> home() {
-        return new ResponseEntity<>("Welcome to my site.", HttpStatus.OK);
+        return new ResponseEntity<>("Welcome Engage Esports.", HttpStatus.OK);
     }
 
     @PostMapping("/login")

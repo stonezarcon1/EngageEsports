@@ -60,7 +60,7 @@ than "classId" accept a varchar[255]. classID accepts Long. Users of this
 type will always be defaulted to "enabled" and have their "teacher" value
 initialized as true.
 
-# /player/profile
+# /profile/player-profile
 
 Permissions needed: User
 
@@ -69,3 +69,12 @@ session.
 
 POST: Requires an authenticated session. Applies @RequestBody to the 
 "testField" field within the player profile.
+
+# /profile/student-list
+
+Permissions needed: Staff
+
+GET: Requires an authenticated staff session. Returns all students that are
+part of a class code.
+
+POST: No usage
